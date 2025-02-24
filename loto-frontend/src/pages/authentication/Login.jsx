@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
 import { Field, Formik, Form, ErrorMessage } from "formik";
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 const initialValues = { email: "", password: "" };
@@ -11,30 +12,41 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
-  const [formValues, setFormValues] = useState(initialValues);
+  const navigate = useNavigate();
 
   const handleSubmit = (values) => {
     console.log("Form submitted:", values);
+    navigate("/home"); // Redirect to Home Page on successful login
   };
 
   return (
-    <Formik onSubmit={handleSubmit} validationSchema={validationSchema} initialValues={initialValues}>
-      {({ handleSubmit }) => (
-        <Form className="space-y-5">
-          <div className="space-y-5">
-            <Field as={TextField} name="email" placeholder="Email" type="email" variant="outlined" fullWidth />
-            <ErrorMessage name="email" component="div" className="text-red-500" />
-          </div>
+    <>
+      <Formik onSubmit={handleSubmit} validationSchema={validationSchema} initialValues={initialValues}>
+        {({ handleSubmit }) => (
+          <Form className="login" onSubmit={handleSubmit}>
+            <div className="login-main">
+            <div className="login-block1">
+              <Field as={TextField} name="email" placeholder="Email" type="email" variant="outlined" fullWidth />
+              <ErrorMessage name="email" component="div" className="text-red-500" />
+            </div>
 
-          <div className="space-y-5">
-            <Field as={TextField} name="password" placeholder="Password" type="password" variant="outlined" fullWidth />
-            <ErrorMessage name="password" component="div" className="text-red-500" />
-          </div>
+            <div className="login-block2">
+              <Field as={TextField} name="password" placeholder="Password" type="password" variant="outlined" fullWidth />
+              <ErrorMessage name="password" component="div" className="text-red-500" />
+            </div>
+            <button type="submit" className="btn-login">Login</button>
+            </div>
 
-          <button type="submit" className="btn-form">Login</button>
-        </Form>
-      )}
-    </Formik>
+            
+          </Form>
+        )}
+      </Formik>
+      
+      <div className="under-section-login">
+        <p>If you don't have an account?</p>
+        <button className="btn-signup" onClick={() => navigate("/register")}>Register</button>
+      </div>
+    </>
   );
 };
 
